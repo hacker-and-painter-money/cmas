@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: manyai123456!
+    url: jdbc:mysql://usw-cynosdbmysql-grp-gc2c397v.sql.tencentcdb.com:24061/cmas
+  main:
+    allow-circular-references: true
+server:
+  servlet:
+    context-path: "/api"
+  port: 8188
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  type-aliases-package: com.phosa.cmas.model
