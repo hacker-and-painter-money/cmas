@@ -1,11 +1,11 @@
 package com.phosa.cmas.controller;
 
+import com.phosa.cmas.constant.ErrorResponse;
 import com.phosa.cmas.model.Reply;
 import com.phosa.cmas.service.ReplyService;
 import com.phosa.cmas.util.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -37,13 +37,13 @@ public class ReplyController {
         Reply reply = replyService.getById(id);
         if (reply != null) {
             if (reply.getStatus() == 1) {
-                return ResponseUtil.getFailResponse(2, "已删除");
+                return ResponseUtil.getFailResponse(ErrorResponse.ALREADY_DELETED);
             }
-            reply.setStatus(1);
+            reply.setStatus(1L);
             replyService.updateById(reply);
             return ResponseUtil.getSuccessResponse(reply);
         }
-        return ResponseUtil.getFailResponse("错误ID");
+        return ResponseUtil.getFailResponse(ErrorResponse.INVALID_ID);
     }
     @PostMapping("")
     public ResponseEntity<?> addReply(@RequestBody Reply reply) {
@@ -52,7 +52,7 @@ public class ReplyController {
         if (res) {
             return ResponseUtil.getSuccessResponse(reply);
         }
-        return ResponseUtil.getFailResponse("服务异常");
+        return ResponseUtil.getFailResponse(ErrorResponse.SERVER_ERROR);
     }
 
     @PutMapping("/{id}")
@@ -63,9 +63,9 @@ public class ReplyController {
             if (replyService.updateById(reply)) {
                 return ResponseUtil.getSuccessResponse(reply);
             }
-            return ResponseUtil.getFailResponse(2, "服务异常");
+            return ResponseUtil.getFailResponse(ErrorResponse.SERVER_ERROR);
         }
-        return ResponseUtil.getFailResponse("错误ID");
+        return ResponseUtil.getFailResponse(ErrorResponse.INVALID_ID);
     }
 
 }

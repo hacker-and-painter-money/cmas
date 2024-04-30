@@ -1,5 +1,6 @@
 package com.phosa.cmas.controller;
 
+import com.phosa.cmas.constant.ErrorResponse;
 import com.phosa.cmas.model.PointHistory;
 import com.phosa.cmas.service.PointHistoryService;
 import com.phosa.cmas.service.UserService;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/points_history")
+@RequestMapping("/point_history")
 public class PointHistoryController {
     @Autowired
     PointHistoryService pointHistoryService;
@@ -41,7 +42,7 @@ public class PointHistoryController {
         if (pointHistory != null) {
             return ResponseUtil.getSuccessResponse(pointHistory);
         }
-        return ResponseUtil.getFailResponse("错误ID");
+        return ResponseUtil.getFailResponse(ErrorResponse.INVALID_ID);
     }
 
     /**
@@ -52,15 +53,15 @@ public class PointHistoryController {
         PointHistory target = pointHistoryService.getById(id);
         if (target != null && target.getId() == id) {
             if (target.getStatus() == 0) {
-                return ResponseUtil.getFailResponse(2, "已删除");
+                return ResponseUtil.getFailResponse(ErrorResponse.ALREADY_DELETED);
             }
-            target.setStatus(1);
+            target.setStatus(1L);
             if (pointHistoryService.updateById(target)) {
                 return ResponseUtil.getSuccessResponse(JsonUtil.toJson(target));
             }
-            return ResponseUtil.getFailResponse(3, "服务异常");
+            return ResponseUtil.getFailResponse(ErrorResponse.SERVER_ERROR);
         }
-        return ResponseUtil.getFailResponse("错误ID");
+        return ResponseUtil.getFailResponse(ErrorResponse.INVALID_ID);
     }
 
     @PutMapping("/{id}")
@@ -71,9 +72,9 @@ public class PointHistoryController {
             if (pointHistoryService.updateById(pointHistory)) {
                 return ResponseUtil.getSuccessResponse(pointHistory);
             }
-            return ResponseUtil.getFailResponse(2, "服务异常");
+            return ResponseUtil.getFailResponse(ErrorResponse.SERVER_ERROR);
         }
-        return ResponseUtil.getFailResponse("错误ID");
+        return ResponseUtil.getFailResponse(ErrorResponse.INVALID_ID);
     }
 
 }

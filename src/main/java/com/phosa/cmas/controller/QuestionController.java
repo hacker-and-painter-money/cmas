@@ -1,5 +1,6 @@
 package com.phosa.cmas.controller;
 
+import com.phosa.cmas.constant.ErrorResponse;
 import com.phosa.cmas.model.Question;
 import com.phosa.cmas.model.Question;
 import com.phosa.cmas.service.QuestionService;
@@ -22,8 +23,8 @@ public class QuestionController {
 
 
     @GetMapping("")
-    public ResponseEntity<?> getQuestionList(@RequestParam(required = false) String title, 
-                                            @RequestParam(required = false) String content, 
+    public ResponseEntity<?> getQuestionList(@RequestParam(required = false) String title,
+                                            @RequestParam(required = false) String content,
                                             @RequestParam(required = false, name = "sender_id") Long senderId,
                                             @RequestParam(name = "page", defaultValue = "1") int page,
                                             @RequestParam(name = "page_size", defaultValue = "10") int pageSize) {
@@ -41,13 +42,13 @@ public class QuestionController {
         Question question = questionService.getById(id);
         if (question != null) {
             if (question.getStatus() == 1) {
-                return ResponseUtil.getFailResponse(2, "已删除");
+                return ResponseUtil.getFailResponse(ErrorResponse.ALREADY_DELETED);
             }
-            question.setStatus(1);
+            question.setStatus(1L);
             questionService.updateById(question);
             return ResponseUtil.getSuccessResponse(question);
         }
-        return ResponseUtil.getFailResponse("错误ID");
+        return ResponseUtil.getFailResponse(ErrorResponse.INVALID_ID);
     }
     @PostMapping("")
     public ResponseEntity<?> addQuestion(@RequestBody Question question) {
@@ -56,7 +57,7 @@ public class QuestionController {
         if (res) {
             return ResponseUtil.getSuccessResponse(question);
         }
-        return ResponseUtil.getFailResponse("服务异常");
+        return ResponseUtil.getFailResponse(ErrorResponse.SERVER_ERROR);
     }
 
     @PutMapping("/{id}")
@@ -67,9 +68,9 @@ public class QuestionController {
             if (questionService.updateById(question)) {
                 return ResponseUtil.getSuccessResponse(question);
             }
-            return ResponseUtil.getFailResponse(2, "服务异常");
+            return ResponseUtil.getFailResponse(ErrorResponse.SERVER_ERROR);
         }
-        return ResponseUtil.getFailResponse("错误ID");
+        return ResponseUtil.getFailResponse(ErrorResponse.INVALID_ID);
     }
 
 }

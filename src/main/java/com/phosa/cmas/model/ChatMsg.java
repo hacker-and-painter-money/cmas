@@ -11,12 +11,12 @@ import java.util.Date;
 @NoArgsConstructor
 public class ChatMsg {
 
-    private long id;
-    private long groupId;
-    private long senderId;
+    private Long id;
+    private Long groupId;
+    private Long senderId;
     private String content;
-    private long parentMsgId;
-    private long status;
+    private Long parentMsgId;
+    private Long status;
     private Date createdAt;
     private Date updatedAt;
 

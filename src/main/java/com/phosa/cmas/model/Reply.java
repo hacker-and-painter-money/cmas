@@ -11,12 +11,12 @@ import java.util.Date;
 @NoArgsConstructor
 public class Reply {
 
-    private long id;
+    private Long id;
     private String content;
-    private long senderId;
-    private long questionId;
-    private long parentReplyId;
-    private long status;
+    private Long senderId;
+    private Long questionId;
+    private Long parentReplyId;
+    private Long status;
     private Date createdAt;
     private Date updatedAt;
 

@@ -58,7 +58,7 @@ public class UserController {
             if (user.getStatus() == 1) {
                 return ResponseUtil.getFailResponse(ErrorResponse.ALREADY_DELETED);
             }
-            user.setStatus(1);
+            user.setStatus(1L);
             if (userService.updateById(user)) {
                 return ResponseUtil.getSuccessResponse(user);
             }

@@ -24,7 +24,7 @@ public class ChatGroupController {
      * http param： keyword 模糊查询
      */
     @GetMapping("")
-    public ResponseEntity<?> getChatGroups(@RequestParam(required = false, defaultValue = "") String name, 
+    public ResponseEntity<?> getChatGroups(@RequestParam(required = false, defaultValue = "") String name,
                                             @RequestParam(required = false) Long type,
                                             @RequestParam(name = "page", defaultValue = "1") int page,
                                             @RequestParam(name = "page_size", defaultValue = "10") int pageSize) {
@@ -44,7 +44,7 @@ public class ChatGroupController {
             if (chatGroup.getStatus() == 1) {
                 return ResponseUtil.getFailResponse(ErrorResponse.ALREADY_DELETED);
             }
-            chatGroup.setStatus(1);
+            chatGroup.setStatus(1L);
             chatGroup.setUpdatedAt(DateUtil.getCurrentDate());
             chatGroupService.updateById(chatGroup);
             return ResponseUtil.getSuccessResponse(chatGroup);
@@ -69,7 +69,7 @@ public class ChatGroupController {
      *                  }
      */
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateChatGroup(@PathVariable int id, @RequestBody ChatGroup chatGroup) {
+    public ResponseEntity<?> updateChatGroup(@PathVariable Long id, @RequestBody ChatGroup chatGroup) {
         ChatGroup target = chatGroupService.getById(id);
         if (target != null) {
             chatGroup.setId(id);

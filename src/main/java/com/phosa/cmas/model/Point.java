@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Point {
 
-    private long id;
-    private long userId;
-    private long totalPoints;
-    private long status;
+    private Long id;
+    private Long userId;
+    private Long totalPoints;
+    private Long status;
 }

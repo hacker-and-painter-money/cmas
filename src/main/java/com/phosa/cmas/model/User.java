@@ -12,11 +12,11 @@ import java.util.Date;
 @NoArgsConstructor
 public class User {
 
-    private long id;
+    private Long id;
     private String username;
     private String password;
-    private long identity;
-    private long status;
+    private Long identity;
+    private Long status;
     private Date createdAt;
     private Date updatedAt;
 

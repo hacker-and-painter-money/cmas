@@ -11,11 +11,11 @@ import java.util.Date;
 @NoArgsConstructor
 public class ChatGroupUserRelation {
 
-    private long id;
-    private long groupId;
-    private long userId;
-    private long identity;
-    private long status;
+    private Long id;
+    private Long groupId;
+    private Long userId;
+    private Long identity;
+    private Long status;
     private Date createdAt;
     private Date updatedAt;
 

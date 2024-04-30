@@ -1,5 +1,6 @@
 package com.phosa.cmas.controller;
 
+import com.phosa.cmas.constant.ErrorResponse;
 import com.phosa.cmas.model.ChatMsg;
 import com.phosa.cmas.service.ChatMsgService;
 import com.phosa.cmas.util.ResponseUtil;
@@ -40,13 +41,13 @@ public class ChatMsgController {
         ChatMsg chatMsg = chatMsgService.getById(id);
         if (chatMsg != null) {
             if (chatMsg.getStatus() == 1) {
-                return ResponseUtil.getFailResponse(2, "已删除");
+                return ResponseUtil.getFailResponse(ErrorResponse.ALREADY_DELETED);
             }
-            chatMsg.setStatus(1);
+            chatMsg.setStatus(1L);
             chatMsgService.updateById(chatMsg);
             return ResponseUtil.getSuccessResponse(chatMsg);
         }
-        return ResponseUtil.getFailResponse("错误ID");
+        return ResponseUtil.getFailResponse(ErrorResponse.INVALID_ID);
     }
     @PostMapping("")
     public ResponseEntity<?> addChatMsg(@RequestBody ChatMsg chatMsg) {
@@ -55,7 +56,7 @@ public class ChatMsgController {
         if (res) {
             return ResponseUtil.getSuccessResponse(chatMsg);
         }
-        return ResponseUtil.getFailResponse("服务异常");
+        return ResponseUtil.getFailResponse(ErrorResponse.SERVER_ERROR);
     }
 
     @PutMapping("/{id}")
@@ -66,9 +67,9 @@ public class ChatMsgController {
             if (chatMsgService.updateById(chatMsg)) {
                 return ResponseUtil.getSuccessResponse(chatMsg);
             }
-            return ResponseUtil.getFailResponse(2, "服务异常");
+            return ResponseUtil.getFailResponse(ErrorResponse.SERVER_ERROR);
         }
-        return ResponseUtil.getFailResponse("错误ID");
+        return ResponseUtil.getFailResponse(ErrorResponse.INVALID_ID);
     }
 
 }

@@ -1,5 +1,6 @@
 package com.phosa.cmas.controller;
 
+import com.phosa.cmas.constant.ErrorResponse;
 import com.phosa.cmas.model.Resource;
 import com.phosa.cmas.model.Resource;
 import com.phosa.cmas.service.ResourceService;
@@ -22,8 +23,8 @@ public class ResourceController {
 
 
     @GetMapping("")
-    public ResponseEntity<?> getResourceList(@RequestParam(required = false) String title, 
-                                            @RequestParam(required = false) String tag, 
+    public ResponseEntity<?> getResourceList(@RequestParam(required = false) String title,
+                                            @RequestParam(required = false) String tag,
                                             @RequestParam(required = false, name = "owner_id")String ownerId,
                                             @RequestParam(name = "page", defaultValue = "1") int page,
                                             @RequestParam(name = "page_size", defaultValue = "10") int pageSize) {
@@ -41,13 +42,13 @@ public class ResourceController {
         Resource resource = resourceService.getById(id);
         if (resource != null) {
             if (resource.getStatus() == 1) {
-                return ResponseUtil.getFailResponse(2, "已删除");
+                return ResponseUtil.getFailResponse(ErrorResponse.ALREADY_DELETED);
             }
-            resource.setStatus(1);
+            resource.setStatus(1L);
             resourceService.updateById(resource);
             return ResponseUtil.getSuccessResponse(resource);
         }
-        return ResponseUtil.getFailResponse("错误ID");
+        return ResponseUtil.getFailResponse(ErrorResponse.INVALID_ID);
     }
     @PostMapping("")
     public ResponseEntity<?> addResource(@RequestBody Resource resource) {
@@ -56,7 +57,7 @@ public class ResourceController {
         if (res) {
             return ResponseUtil.getSuccessResponse(resource);
         }
-        return ResponseUtil.getFailResponse("服务异常");
+        return ResponseUtil.getFailResponse(ErrorResponse.SERVER_ERROR);
     }
 
     @PutMapping("/{id}")
@@ -67,9 +68,9 @@ public class ResourceController {
             if (resourceService.updateById(resource)) {
                 return ResponseUtil.getSuccessResponse(resource);
             }
-            return ResponseUtil.getFailResponse(2, "服务异常");
+            return ResponseUtil.getFailResponse(ErrorResponse.SERVER_ERROR);
         }
-        return ResponseUtil.getFailResponse("错误ID");
+        return ResponseUtil.getFailResponse(ErrorResponse.INVALID_ID);
     }
 
 }

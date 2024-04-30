@@ -11,9 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
 public class ResponseUtil {
-    public static ResponseEntity<?> getSuccessResponse() {
-        return getSuccessResponse("OK", null);
-    }
+
     public static ResponseEntity<?> getSuccessResponse(Object data) {
         return getSuccessResponse("OK", data);
     }
@@ -22,18 +20,10 @@ public class ResponseUtil {
     }
 
 
-    public static ResponseEntity<?> getFailResponse() {
-        return getFailResponse("ERROR");
-    }
     public static ResponseEntity<?> getFailResponse(ErrorResponse error) {
-        return getFailResponse(error.getCode(), error.getMsg());
+        return getResponse(error.getCode(), error.getMsg(), null);
     }
-    public static ResponseEntity<?> getFailResponse(String msg) {
-        return getResponse(1, msg, null);
-    }
-    public static ResponseEntity<?> getFailResponse(int code, String msg) {
-        return getResponse(code, msg, null);
-    }
+
     public static ResponseEntity<?> getResponse(int code, String msg, JsonElement data) {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("code", code);

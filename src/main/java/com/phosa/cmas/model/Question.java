@@ -11,11 +11,11 @@ import java.util.Date;
 @NoArgsConstructor
 public class Question {
 
-    private long id;
+    private Long id;
     private String title;
     private String content;
-    private long senderId;
-    private long status;
+    private Long senderId;
+    private Long status;
     private Date createdAt;
     private Date updatedAt;
 

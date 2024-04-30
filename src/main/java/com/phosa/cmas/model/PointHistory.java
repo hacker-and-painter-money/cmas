@@ -11,11 +11,11 @@ import java.util.Date;
 @NoArgsConstructor
 public class PointHistory {
 
-    private long id;
-    private long userId;
-    private long changeAmount;
+    private Long id;
+    private Long userId;
+    private Long changeAmount;
     private String reason;
-    private long status;
+    private Long status;
     private Date createdAt;
 
 

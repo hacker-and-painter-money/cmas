@@ -11,11 +11,11 @@ import java.util.Date;
 @NoArgsConstructor
 public class ChatGroup {
 
-    private long id;
+    private Long id;
     private String name;
     //0:私聊，1：群聊
-    private long type;
-    private long status;
+    private Long type;
+    private Long status;
     private Date createdAt;
     private Date updatedAt;
 

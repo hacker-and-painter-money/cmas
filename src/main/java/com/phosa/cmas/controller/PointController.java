@@ -1,5 +1,6 @@
 package com.phosa.cmas.controller;
 
+import com.phosa.cmas.constant.ErrorResponse;
 import com.phosa.cmas.model.Point;
 import com.phosa.cmas.service.PointService;
 import com.phosa.cmas.util.JsonUtil;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/points")
+@RequestMapping("/point")
 public class PointController {
 
     @Autowired
@@ -38,19 +39,21 @@ public class PointController {
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletePoint(@PathVariable Long id) {
         Point point = pointService.getById(id);
-        if (point != null && point.getId() == id) {
-            point.setStatus(1);
-            pointService.updateById(point);
-            return ResponseUtil.getSuccessResponse(point);
+        if (point != null) {
+            point.setStatus(1L);
+            if (pointService.updateById(point)) {
+                return ResponseUtil.getSuccessResponse(point);
+            }
+            return ResponseUtil.getFailResponse(ErrorResponse.SERVER_ERROR);
         }
-        return ResponseUtil.getFailResponse("错误ID");
+        return ResponseUtil.getFailResponse(ErrorResponse.INVALID_ID);
     }
     @PostMapping("")
     public ResponseEntity<?> addPoint(@RequestBody Point point) {
         Point target = pointService.getById(point.getUserId());
         if (target != null) {
 
-            return ResponseUtil.getFailResponse("信息已存在");
+            return ResponseUtil.getFailResponse(ErrorResponse.USER_ID_EXIST);
         }
         pointService.save(point);
         return ResponseUtil.getSuccessResponse(point);
@@ -64,7 +67,7 @@ public class PointController {
             pointService.updateById(point);
             return ResponseUtil.getSuccessResponse(point);
         }
-        return ResponseUtil.getFailResponse("错误ID");
+        return ResponseUtil.getFailResponse(ErrorResponse.INVALID_ID);
     }
 
 }
