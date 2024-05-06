@@ -6,12 +6,17 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.phosa.cmas.mapper.ChatGroupMapper;
 import com.phosa.cmas.model.ChatGroup;
+import com.phosa.cmas.model.ChatGroupUserRelation;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class ChatGroupService extends ServiceImpl<ChatGroupMapper, ChatGroup> {
+    @Autowired
+    ChatGroupUserRelationService chatGroupUserRelationService;
     public List<ChatGroup> list() {
         return list(Wrappers.emptyWrapper());
     }
@@ -31,5 +36,13 @@ public class ChatGroupService extends ServiceImpl<ChatGroupMapper, ChatGroup> {
         return list(Wrappers.<ChatGroup>lambdaQuery().eq(ChatGroup::getName, name)).get(0);
     }
 
+    public List<ChatGroup> listByUserId(Long userId, int page, int pageSize) {
+        List<ChatGroupUserRelation> chatGroupUserRelationList = chatGroupUserRelationService.list(null, userId, page, pageSize);
+        List<ChatGroup> chatGroups = new ArrayList<>();
+        chatGroupUserRelationList.forEach(r -> {
+            chatGroups.add(getById(r.getGroupId()));
+        });
+        return chatGroups;
+    }
 
 }

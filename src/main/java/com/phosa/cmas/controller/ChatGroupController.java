@@ -32,6 +32,15 @@ public class ChatGroupController {
         return ResponseUtil.getSuccessResponse(chatGroupList);
     }
 
+    @GetMapping("/user/{user_id}")
+    public ResponseEntity<?> getChatGroupsByUser(@PathVariable(name = "user_id") Long userId,
+                                           @RequestParam(name = "page", defaultValue = "1") int page,
+                                           @RequestParam(name = "page_size", defaultValue = "10") int pageSize) {
+
+        List<ChatGroup> chatGroupList = chatGroupService.listByUserId(userId, page, pageSize);
+        return ResponseUtil.getSuccessResponse(chatGroupList);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<?> getChatGroup(@PathVariable int id) {
         ChatGroup chatGroup = chatGroupService.getById(id);
