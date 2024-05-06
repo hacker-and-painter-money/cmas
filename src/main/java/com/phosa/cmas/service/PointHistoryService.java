@@ -13,10 +13,10 @@ import java.util.List;
 @Service
 public class PointHistoryService extends ServiceImpl<PointHistoryMapper, PointHistory> {
     public List<PointHistory> list() {
-        return list(Wrappers.emptyWrapper());
+        return list(Wrappers.lambdaQuery());
     }
-    public List<PointHistory> list(QueryWrapper<PointHistory> queryWrapper) {
-        return super.list(queryWrapper.lambda().eq(false, PointHistory::getStatus, 1));
+    public List<PointHistory> list(LambdaQueryWrapper<PointHistory> queryWrapper) {
+        return super.list(queryWrapper.eq(false, PointHistory::getStatus, 1));
     }
     public List<PointHistory> list(Long userId, int page, int pageSize) {
         LambdaQueryWrapper<PointHistory> wrapper = Wrappers.<PointHistory>lambdaQuery();

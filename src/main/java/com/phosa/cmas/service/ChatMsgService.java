@@ -20,7 +20,7 @@ import java.util.List;
 @Service
 public class ChatMsgService extends ServiceImpl<ChatMsgMapper, ChatMsg> {
     public List<ChatMsg> list() {
-        return list(Wrappers.emptyWrapper());
+        return list(Wrappers.lambdaQuery());
     }
     public List<ChatMsg> list(Long groupId, Long senderId, String content, Long parentMsgId, int page, int pageSize) {
         LambdaQueryWrapper<ChatMsg> wrapper = Wrappers.lambdaQuery();
@@ -38,8 +38,8 @@ public class ChatMsgService extends ServiceImpl<ChatMsgMapper, ChatMsg> {
         }
         return list(wrapper.last("limit " + pageSize * (page - 1) + ", " + pageSize));
     }
-    public List<ChatMsg> list(QueryWrapper<ChatMsg> queryWrapper) {
-        return super.list(queryWrapper.lambda().eq(false, ChatMsg::getStatus, 1));
+    public List<ChatMsg> list(LambdaQueryWrapper<ChatMsg> queryWrapper) {
+        return super.list(queryWrapper.eq(false, ChatMsg::getStatus, 1));
     }
     public List<ChatMsg> listByGroupId(Long groupId) {
         return list(Wrappers.<ChatMsg>lambdaQuery().eq(ChatMsg::getGroupId, groupId));

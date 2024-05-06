@@ -20,10 +20,10 @@ import java.util.List;
 @Service
 public class ResourceService extends ServiceImpl<ResourceMapper, Resource> {
     public List<Resource> list() {
-        return list(Wrappers.emptyWrapper());
+        return list(Wrappers.lambdaQuery());
     }
-    public List<Resource> list(QueryWrapper<Resource> queryWrapper) {
-        return super.list(queryWrapper.lambda().eq(false, Resource::getStatus, 1));
+    public List<Resource> list(LambdaQueryWrapper<Resource> queryWrapper) {
+        return super.list(queryWrapper.eq(false, Resource::getStatus, 1));
     }
     public List<Resource> list(String title, String tag, String ownerId, int page, int pageSize) {
         LambdaQueryWrapper<Resource> wrapper = Wrappers.<Resource>lambdaQuery();
@@ -31,7 +31,7 @@ public class ResourceService extends ServiceImpl<ResourceMapper, Resource> {
             wrapper.like(Resource::getTitle, title);
         }
         if (tag != null) {
-            wrapper.eq(Resource::getTag, tag); 
+            wrapper.eq(Resource::getTag, tag);
         }
         if (ownerId != null) {
             wrapper.eq(Resource::getOwnerId, ownerId);

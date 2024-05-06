@@ -13,10 +13,10 @@ import java.util.List;
 @Service
 public class ReplyService extends ServiceImpl<ReplyMapper, Reply> {
     public List<Reply> list() {
-        return list(Wrappers.emptyWrapper());
+        return list(Wrappers.lambdaQuery());
     }
-    public List<Reply> list(QueryWrapper<Reply> queryWrapper) {
-        return super.list(queryWrapper.lambda().eq(false, Reply::getStatus, 1));
+    public List<Reply> list(LambdaQueryWrapper<Reply> queryWrapper) {
+        return super.list(queryWrapper.eq(false, Reply::getStatus, 1));
     }
     public List<Reply> list(Long questionId, Long replyId, Long senderId, int page, int pageSize) {
         LambdaQueryWrapper<Reply> wrapper = Wrappers.<Reply>lambdaQuery();
@@ -24,7 +24,7 @@ public class ReplyService extends ServiceImpl<ReplyMapper, Reply> {
             wrapper.eq(Reply::getQuestionId, questionId);
         }
         if (replyId != null) {
-            wrapper.eq(Reply::getParentReplyId, replyId); 
+            wrapper.eq(Reply::getParentReplyId, replyId);
         }
         if (senderId != null) {
             wrapper.eq(Reply::getSenderId, senderId);
