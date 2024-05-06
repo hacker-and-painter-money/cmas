@@ -2,8 +2,8 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
-    password: manyai123456!
-    url: jdbc:mysql://usw-cynosdbmysql-grp-gc2c397v.sql.tencentcdb.com:24061/cmas
+    password: mysqlHHH123...
+    url: jdbc:mysql://gz-cdb-fg5tqemn.sql.tencentcdb.com:63279/cmas
   main:
     allow-circular-references: true
 server:
