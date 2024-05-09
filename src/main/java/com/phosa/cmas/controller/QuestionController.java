@@ -52,7 +52,6 @@ public class QuestionController {
     }
     @PostMapping("")
     public ResponseEntity<?> addQuestion(@RequestBody Question question) {
-
         boolean res = questionService.save(question);
         if (res) {
             return ResponseUtil.getSuccessResponse(question);

@@ -18,6 +18,7 @@ public enum ErrorResponse {
     USER_ID_NOT_EXIST (201, "用户ID不存在"),
     CHAT_GROUP_ID_NOT_EXIST (202, "聊天组ID不存在"),
     USER_ALREADY_JOINED (203, "用户已加入"),
+    NAME_EXIST(204, "名称已存在"),
 
     //Point
     USER_ID_EXIST (301, "用户ID已存在"),

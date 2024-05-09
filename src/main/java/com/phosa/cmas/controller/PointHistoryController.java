@@ -2,6 +2,7 @@ package com.phosa.cmas.controller;
 
 import com.phosa.cmas.constant.ErrorResponse;
 import com.phosa.cmas.model.PointHistory;
+import com.phosa.cmas.model.PointHistory;
 import com.phosa.cmas.service.PointHistoryService;
 import com.phosa.cmas.service.UserService;
 import com.phosa.cmas.util.JsonUtil;
@@ -76,5 +77,12 @@ public class PointHistoryController {
         }
         return ResponseUtil.getFailResponse(ErrorResponse.INVALID_ID);
     }
-
+    @PostMapping("")
+    public ResponseEntity<?> addPointHistory(@RequestBody PointHistory pointHistory) {
+        boolean res = pointHistoryService.save(pointHistory);
+        if (res) {
+            return ResponseUtil.getSuccessResponse(pointHistory);
+        }
+        return ResponseUtil.getFailResponse(ErrorResponse.SERVER_ERROR);
+    }
 }

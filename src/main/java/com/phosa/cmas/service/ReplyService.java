@@ -6,17 +6,32 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.phosa.cmas.mapper.ReplyMapper;
 import com.phosa.cmas.model.Reply;
+import com.phosa.cmas.model.User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class ReplyService extends ServiceImpl<ReplyMapper, Reply> {
+    private final UserService userService;
+
+    public ReplyService(UserService userService) {
+        this.userService = userService;
+    }
+
     public List<Reply> list() {
         return list(Wrappers.lambdaQuery());
     }
     public List<Reply> list(LambdaQueryWrapper<Reply> queryWrapper) {
-        return super.list(queryWrapper.eq(false, Reply::getStatus, 1));
+        List<Reply> replyList = super.list(queryWrapper.eq(false, Reply::getStatus, 1));
+        replyList.forEach(reply -> {
+            User user = userService.getById(reply.getSenderId());
+            reply.setSenderName(user.getUsername());
+            if (reply.getParentReplyId() != null) {
+                reply.setParentReplyContent(getById(reply.getParentReplyId()).getContent());
+            }
+        });
+        return replyList;
     }
     public List<Reply> list(Long questionId, Long replyId, Long senderId, int page, int pageSize) {
         LambdaQueryWrapper<Reply> wrapper = Wrappers.<Reply>lambdaQuery();

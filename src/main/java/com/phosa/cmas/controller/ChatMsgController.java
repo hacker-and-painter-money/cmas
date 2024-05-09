@@ -20,10 +20,10 @@ public class ChatMsgController {
 
 
     @GetMapping("")
-    public ResponseEntity<?> getChatMsgListByGroup(@RequestParam(name = "group_id") Long groupId,
-                                                   @RequestParam(name = "sender_id") Long senderId,
-                                                   @RequestParam(name = "content") String content,
-                                                   @RequestParam(name = "parent_msg_id") Long parentMsgId,
+    public ResponseEntity<?> getChatMsgListByGroup(@RequestParam(required = false, name = "group_id") Long groupId,
+                                                   @RequestParam(required = false, name = "sender_id") Long senderId,
+                                                   @RequestParam(required = false, name = "content") String content,
+                                                   @RequestParam(required = false, name = "parent_msg_id") Long parentMsgId,
                                                    @RequestParam(name = "page", defaultValue = "1") int page,
                                                    @RequestParam(name = "page_size", defaultValue = "10") int pageSize) {
         List<ChatMsg> replies = chatMsgService.list(groupId, senderId, content, parentMsgId, page, pageSize);

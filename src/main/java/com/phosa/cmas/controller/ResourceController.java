@@ -52,7 +52,6 @@ public class ResourceController {
     }
     @PostMapping("")
     public ResponseEntity<?> addResource(@RequestBody Resource resource) {
-
         boolean res = resourceService.save(resource);
         if (res) {
             return ResponseUtil.getSuccessResponse(resource);

@@ -9,6 +9,7 @@ import com.phosa.cmas.mapper.ChatMsgMapper;
 import com.phosa.cmas.model.ChatGroup;
 import com.phosa.cmas.model.ChatGroupUserRelation;
 import com.phosa.cmas.model.ChatMsg;
+import com.phosa.cmas.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,6 +20,12 @@ import java.util.List;
 
 @Service
 public class ChatMsgService extends ServiceImpl<ChatMsgMapper, ChatMsg> {
+    private final UserService userService;
+
+    public ChatMsgService(UserService userService) {
+        this.userService = userService;
+    }
+
     public List<ChatMsg> list() {
         return list(Wrappers.lambdaQuery());
     }
@@ -39,10 +46,16 @@ public class ChatMsgService extends ServiceImpl<ChatMsgMapper, ChatMsg> {
         return list(wrapper.last("limit " + pageSize * (page - 1) + ", " + pageSize));
     }
     public List<ChatMsg> list(LambdaQueryWrapper<ChatMsg> queryWrapper) {
-        return super.list(queryWrapper.eq(false, ChatMsg::getStatus, 1));
+        List<ChatMsg> chatMsgList = super.list(queryWrapper.eq(false, ChatMsg::getStatus, 1));
+        chatMsgList.forEach(chatMsg -> {
+            User user = userService.getById(chatMsg.getSenderId());
+            chatMsg.setSenderName(user.getUsername());
+            if (chatMsg.getParentMsgId() != null) {
+                chatMsg.setParentMsgContent(getById(chatMsg.getParentMsgId()).getContent());
+            }
+        });
+        return chatMsgList;
     }
-    public List<ChatMsg> listByGroupId(Long groupId) {
-        return list(Wrappers.<ChatMsg>lambdaQuery().eq(ChatMsg::getGroupId, groupId));
-    }
+
 
 }

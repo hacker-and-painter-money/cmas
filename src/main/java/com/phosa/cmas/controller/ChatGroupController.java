@@ -2,7 +2,10 @@ package com.phosa.cmas.controller;
 
 import com.phosa.cmas.constant.ErrorResponse;
 import com.phosa.cmas.model.ChatGroup;
+import com.phosa.cmas.model.ChatGroupUserRelation;
+import com.phosa.cmas.model.User;
 import com.phosa.cmas.service.ChatGroupService;
+import com.phosa.cmas.service.ChatGroupUserRelationService;
 import com.phosa.cmas.util.DateUtil;
 import com.phosa.cmas.util.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +21,8 @@ public class ChatGroupController {
 
     @Autowired
     ChatGroupService chatGroupService;
+    @Autowired
+    private ChatGroupUserRelationService chatGroupUserRelationService;
 
     /**
      * 获取所有聊天群组列表。
@@ -63,8 +68,25 @@ public class ChatGroupController {
 
     @PostMapping("")
     public ResponseEntity<?> addChatGroup(@RequestBody ChatGroup chatGroup) {
+        if (chatGroup.getType() == 0) {
+            chatGroup.setName(chatGroup.getOwnerId() + "-" + chatGroup.getTargetId());
+        }
+        List<ChatGroup> target = chatGroupService.getByName(chatGroup.getName());
+        if (!target.isEmpty()) {
+            return ResponseUtil.getFailResponse(ErrorResponse.NAME_EXIST);
+        }
         boolean b = chatGroupService.save(chatGroup);
         if (b) {
+            ChatGroup targetGroup = chatGroupService.getByName(chatGroup.getName()).get(0);
+            ChatGroupUserRelation chatGroupUserRelation = new ChatGroupUserRelation();
+            chatGroupUserRelation.setGroupId(targetGroup.getId());
+            chatGroupUserRelation.setUserId(chatGroup.getOwnerId());
+            chatGroupUserRelation.setIdentity(2L);
+            chatGroupUserRelationService.save(chatGroupUserRelation);
+            if (chatGroup.getType() == 0) {
+                chatGroupUserRelation.setUserId(chatGroup.getTargetId());
+                chatGroupUserRelationService.save(chatGroupUserRelation);
+            }
             return ResponseUtil.getSuccessResponse(chatGroup);
         }
         return ResponseUtil.getFailResponse(ErrorResponse.SERVER_ERROR);

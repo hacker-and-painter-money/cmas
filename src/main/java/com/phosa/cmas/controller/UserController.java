@@ -69,7 +69,7 @@ public class UserController {
     @PostMapping("")
     public ResponseEntity<?> addUser(@RequestBody User user) {
         List<User> target = userService.getByUsername(user.getUsername());
-        if (target.isEmpty()) {
+        if (!target.isEmpty()) {
             return ResponseUtil.getFailResponse(ErrorResponse.USERNAME_EXIST);
         }
         try {

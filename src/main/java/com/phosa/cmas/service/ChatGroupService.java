@@ -39,8 +39,8 @@ public class ChatGroupService extends ServiceImpl<ChatGroupMapper, ChatGroup> {
         return list(wrapper.last("limit " + pageSize * (page - 1) + ", " + pageSize));
     }
 
-    public ChatGroup getByName(String name) {
-        return list(Wrappers.<ChatGroup>lambdaQuery().eq(ChatGroup::getName, name)).get(0);
+    public List<ChatGroup> getByName(String name) {
+        return list(Wrappers.<ChatGroup>lambdaQuery().eq(ChatGroup::getName, name));
     }
 
     public List<ChatGroup> listByUserId(Long userId, int page, int pageSize) {

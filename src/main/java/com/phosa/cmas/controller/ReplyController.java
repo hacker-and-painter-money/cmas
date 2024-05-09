@@ -18,11 +18,11 @@ public class ReplyController {
     ReplyService replyService;
 
     @GetMapping("")
-    public ResponseEntity<?> getReplyList(@RequestParam(name = "question_id") Long questionId,
-                                                    @RequestParam(name = "reply_id") Long replyId,
-                                                    @RequestParam(name = "sender_id") Long senderId,
-                                                    @RequestParam(name = "page", defaultValue = "1") int page,
-                                                    @RequestParam(name = "page_size", defaultValue = "10") int pageSize) {
+    public ResponseEntity<?> getReplyList(@RequestParam(required = false, name = "question_id") Long questionId,
+                                          @RequestParam(required = false, name = "reply_id") Long replyId,
+                                          @RequestParam(required = false, name = "sender_id") Long senderId,
+                                          @RequestParam(name = "page", defaultValue = "1") int page,
+                                          @RequestParam(name = "page_size", defaultValue = "10") int pageSize) {
         List<Reply> replies = replyService.list(questionId, replyId, senderId, page, pageSize);
         return ResponseUtil.getSuccessResponse(replies);
     }
@@ -47,7 +47,6 @@ public class ReplyController {
     }
     @PostMapping("")
     public ResponseEntity<?> addReply(@RequestBody Reply reply) {
-
         boolean res = replyService.save(reply);
         if (res) {
             return ResponseUtil.getSuccessResponse(reply);
