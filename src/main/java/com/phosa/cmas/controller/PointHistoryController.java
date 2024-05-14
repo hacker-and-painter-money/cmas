@@ -1,9 +1,11 @@
 package com.phosa.cmas.controller;
 
 import com.phosa.cmas.constant.ErrorResponse;
+import com.phosa.cmas.model.Point;
 import com.phosa.cmas.model.PointHistory;
 import com.phosa.cmas.model.PointHistory;
 import com.phosa.cmas.service.PointHistoryService;
+import com.phosa.cmas.service.PointService;
 import com.phosa.cmas.service.UserService;
 import com.phosa.cmas.util.JsonUtil;
 import com.phosa.cmas.util.ResponseUtil;
@@ -19,6 +21,9 @@ import java.util.List;
 public class PointHistoryController {
     @Autowired
     PointHistoryService pointHistoryService;
+
+    @Autowired
+    PointService pointService;
 
     @Autowired
     UserService userService;
@@ -79,8 +84,7 @@ public class PointHistoryController {
     }
     @PostMapping("")
     public ResponseEntity<?> addPointHistory(@RequestBody PointHistory pointHistory) {
-        boolean res = pointHistoryService.save(pointHistory);
-        if (res) {
+        if (pointHistoryService.changePoint(pointHistory)) {
             return ResponseUtil.getSuccessResponse(pointHistory);
         }
         return ResponseUtil.getFailResponse(ErrorResponse.SERVER_ERROR);

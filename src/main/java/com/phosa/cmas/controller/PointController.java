@@ -28,7 +28,17 @@ public class PointController {
     @GetMapping("/user/{user_id}")
     public ResponseEntity<?> getPointList(@PathVariable(name = "user_id") Long userId) {
         List<Point> pointList = pointService.getByUserId(userId);
-        return ResponseUtil.getSuccessResponse(pointList);
+        Point res = null;
+        System.out.println(pointList);
+        if (!pointList.isEmpty()) {
+            res = pointList.get(0);
+        } else {
+            res = new Point();
+            res.setTotalPoints(0L);
+            res.setUserId(userId);
+            addPoint(res);
+        }
+        return ResponseUtil.getSuccessResponse(res);
     }
 
     @GetMapping("/{id}")

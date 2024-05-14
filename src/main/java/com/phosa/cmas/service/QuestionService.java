@@ -23,7 +23,7 @@ public class QuestionService extends ServiceImpl<QuestionMapper, Question> {
         return list(Wrappers.lambdaQuery());
     }
     public List<Question> list(LambdaQueryWrapper<Question> queryWrapper) {
-        List<Question> questionList = super.list(queryWrapper.eq(false, Question::getStatus, 1));
+        List<Question> questionList = super.list(queryWrapper.ne(Question::getStatus, 1));
         questionList.forEach(question -> {
             question.setSenderName(userService.getById(question.getSenderId()).getUsername());
         });

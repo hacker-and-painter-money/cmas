@@ -1,7 +1,9 @@
 package com.phosa.cmas.controller;
 
 import com.phosa.cmas.constant.ErrorResponse;
+import com.phosa.cmas.model.PointHistory;
 import com.phosa.cmas.model.Reply;
+import com.phosa.cmas.service.PointHistoryService;
 import com.phosa.cmas.service.ReplyService;
 import com.phosa.cmas.util.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,9 @@ public class ReplyController {
 
     @Autowired
     ReplyService replyService;
+
+    @Autowired
+    PointHistoryService pointHistoryService;
 
     @GetMapping("")
     public ResponseEntity<?> getReplyList(@RequestParam(required = false, name = "question_id") Long questionId,
@@ -49,6 +54,12 @@ public class ReplyController {
     public ResponseEntity<?> addReply(@RequestBody Reply reply) {
         boolean res = replyService.save(reply);
         if (res) {
+            
+            PointHistory pointHistory = new PointHistory();
+            pointHistory.setChangeAmount(1L);
+            pointHistory.setUserId(reply.getSenderId());
+            pointHistory.setReason(2L);
+            pointHistoryService.changePoint(pointHistory);
             return ResponseUtil.getSuccessResponse(reply);
         }
         return ResponseUtil.getFailResponse(ErrorResponse.SERVER_ERROR);

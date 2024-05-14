@@ -16,7 +16,7 @@ public class ChatGroupUserRelationService extends ServiceImpl<ChatGroupUserRelat
         return list(Wrappers.emptyWrapper());
     }
     public List<ChatGroupUserRelation> list(QueryWrapper<ChatGroupUserRelation> queryWrapper) {
-        return super.list(queryWrapper.lambda().eq(false, ChatGroupUserRelation::getStatus, 1));
+        return super.list(queryWrapper.lambda().ne(ChatGroupUserRelation::getStatus, 1));
     }
     public List<ChatGroupUserRelation> list(Long groupId, Long userId, int page, int pageSize) {
         LambdaQueryWrapper<ChatGroupUserRelation> wrapper = Wrappers.<ChatGroupUserRelation>lambdaQuery();

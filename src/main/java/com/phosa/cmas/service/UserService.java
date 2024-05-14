@@ -22,7 +22,7 @@ public class UserService extends ServiceImpl<UserMapper, User> {
         return list(Wrappers.lambdaQuery());
     }
     public List<User> list(LambdaQueryWrapper<User> queryWrapper) {
-        return super.list(queryWrapper.eq(false, User::getStatus, 1));
+        return super.list(queryWrapper.ne(User::getStatus, 1));
     }
     public List<User> getByUsername(String username) {
         return super.list(Wrappers.<User>lambdaQuery().eq(User::getUsername, username));

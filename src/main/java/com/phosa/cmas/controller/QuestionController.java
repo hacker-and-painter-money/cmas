@@ -1,8 +1,10 @@
 package com.phosa.cmas.controller;
 
 import com.phosa.cmas.constant.ErrorResponse;
+import com.phosa.cmas.model.PointHistory;
 import com.phosa.cmas.model.Question;
 import com.phosa.cmas.model.Question;
+import com.phosa.cmas.service.PointHistoryService;
 import com.phosa.cmas.service.QuestionService;
 import com.phosa.cmas.util.JsonUtil;
 import com.phosa.cmas.util.ResponseUtil;
@@ -21,6 +23,8 @@ public class QuestionController {
     @Autowired
     QuestionService questionService;
 
+    @Autowired
+    PointHistoryService pointHistoryService;
 
     @GetMapping("")
     public ResponseEntity<?> getQuestionList(@RequestParam(required = false) String title,
@@ -54,6 +58,11 @@ public class QuestionController {
     public ResponseEntity<?> addQuestion(@RequestBody Question question) {
         boolean res = questionService.save(question);
         if (res) {
+            PointHistory pointHistory = new PointHistory();
+            pointHistory.setChangeAmount(1L);
+            pointHistory.setUserId(question.getSenderId());
+            pointHistory.setReason(1L);
+            pointHistoryService.changePoint(pointHistory);
             return ResponseUtil.getSuccessResponse(question);
         }
         return ResponseUtil.getFailResponse(ErrorResponse.SERVER_ERROR);

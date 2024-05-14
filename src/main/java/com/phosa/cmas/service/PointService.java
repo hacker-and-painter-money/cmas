@@ -16,7 +16,7 @@ public class PointService extends ServiceImpl<PointMapper, Point> {
         return list(Wrappers.lambdaQuery());
     }
     public List<Point> list(LambdaQueryWrapper<Point> queryWrapper) {
-        return super.list(queryWrapper.eq(false, Point::getStatus, 1));
+        return super.list(queryWrapper.ne(Point::getStatus, 1));
     }
     public List<Point> getByUserId(Long userId) {
         QueryWrapper<Point> wrapper = new QueryWrapper<>();

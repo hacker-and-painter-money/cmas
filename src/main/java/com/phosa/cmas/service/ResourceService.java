@@ -23,7 +23,7 @@ public class ResourceService extends ServiceImpl<ResourceMapper, Resource> {
         return list(Wrappers.lambdaQuery());
     }
     public List<Resource> list(LambdaQueryWrapper<Resource> queryWrapper) {
-        return super.list(queryWrapper.eq(false, Resource::getStatus, 1));
+        return super.list(queryWrapper.ne(Resource::getStatus, 1));
     }
     public List<Resource> list(String title, String tag, String ownerId, int page, int pageSize) {
         LambdaQueryWrapper<Resource> wrapper = Wrappers.<Resource>lambdaQuery();

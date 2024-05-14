@@ -23,7 +23,7 @@ public class ReplyService extends ServiceImpl<ReplyMapper, Reply> {
         return list(Wrappers.lambdaQuery());
     }
     public List<Reply> list(LambdaQueryWrapper<Reply> queryWrapper) {
-        List<Reply> replyList = super.list(queryWrapper.eq(false, Reply::getStatus, 1));
+        List<Reply> replyList = super.list(queryWrapper.ne(Reply::getStatus, 1));
         replyList.forEach(reply -> {
             User user = userService.getById(reply.getSenderId());
             reply.setSenderName(user.getUsername());

@@ -25,7 +25,7 @@ public class ChatGroupService extends ServiceImpl<ChatGroupMapper, ChatGroup> {
         return list(Wrappers.emptyWrapper());
     }
     public List<ChatGroup> list(LambdaQueryWrapper<ChatGroup> queryWrapper) {
-        return super.list(queryWrapper.eq(false, ChatGroup::getStatus, 1));
+        return super.list(queryWrapper.ne(ChatGroup::getStatus, 1));
 
     }
     public List<ChatGroup> list(String name, Long type, int page, int pageSize) {
