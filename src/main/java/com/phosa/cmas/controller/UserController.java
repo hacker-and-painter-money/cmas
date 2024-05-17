@@ -40,9 +40,10 @@ public class UserController {
 
     @GetMapping("")
     public ResponseEntity<?> getUserList(@RequestParam(required = false, defaultValue = "") String username,
+                                        @RequestParam(required = false, name = "except_friend_id") Long exceptFriendId,
                                         @RequestParam(name = "page", defaultValue = "1") int page,
                                         @RequestParam(name = "page_size", defaultValue = "10") int pageSize) {
-        List<User> userList = userService.list(username, page, pageSize);
+        List<User> userList = userService.list(username, exceptFriendId, page, pageSize);
         return ResponseUtil.getSuccessResponse(userList);
     }
 

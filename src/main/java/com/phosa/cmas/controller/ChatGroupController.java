@@ -70,6 +70,9 @@ public class ChatGroupController {
     public ResponseEntity<?> addChatGroup(@RequestBody ChatGroup chatGroup) {
         if (chatGroup.getType() == 0) {
             chatGroup.setName(chatGroup.getOwnerId() + "-" + chatGroup.getTargetId());
+            if (!chatGroupService.getByName(chatGroup.getTargetId() + "-" + chatGroup.getOwnerId()).isEmpty()) {
+                return ResponseUtil.getFailResponse(ErrorResponse.NAME_EXIST);
+            }
         }
         List<ChatGroup> target = chatGroupService.getByName(chatGroup.getName());
         if (!target.isEmpty()) {
@@ -84,6 +87,7 @@ public class ChatGroupController {
             chatGroupUserRelation.setIdentity(2L);
             chatGroupUserRelationService.save(chatGroupUserRelation);
             if (chatGroup.getType() == 0) {
+                chatGroupUserRelation.setIdentity(-1L);
                 chatGroupUserRelation.setUserId(chatGroup.getTargetId());
                 chatGroupUserRelationService.save(chatGroupUserRelation);
             }
