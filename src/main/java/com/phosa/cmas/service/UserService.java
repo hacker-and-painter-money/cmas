@@ -33,12 +33,12 @@ public class UserService extends ServiceImpl<UserMapper, User> {
     public List<User> getByUsername(String username) {
         return super.list(Wrappers.<User>lambdaQuery().eq(User::getUsername, username));
     }
-    public List<User> list(String username, Long exceptFriendId, int page, int pageSize) {
+    public List<User> list(String username, Long exceptFriendId) {
         LambdaQueryWrapper<User> wrapper = Wrappers.<User>lambdaQuery();
         if (username != null) {
             wrapper.like(User::getUsername, username);
         }
-        List<User> list = list(wrapper.last("limit " + pageSize * (page - 1) + ", " + pageSize));
+        List<User> list = list(wrapper);
         if (exceptFriendId != null) {
             List<ChatGroup> exceptList = chatGroupService.list(Wrappers.<ChatGroup>lambdaQuery().eq(ChatGroup::getType, 0).like(ChatGroup::getName, exceptFriendId));
             Set<Long> exceptIds = new HashSet<>();

@@ -35,7 +35,7 @@ public class PointHistoryController {
     public ResponseEntity<?> getPointHistoryList(@RequestParam(name = "user_id") Long userId,
                                                     @RequestParam(name = "page", defaultValue = "1") int page,
                                                     @RequestParam(name = "page_size", defaultValue = "10") int pageSize) {
-        List<PointHistory> pointHistoryList = pointHistoryService.list(userId, page, pageSize);
+        List<PointHistory> pointHistoryList = pointHistoryService.list(userId);
         return ResponseUtil.getSuccessResponse(pointHistoryList);
     }
 

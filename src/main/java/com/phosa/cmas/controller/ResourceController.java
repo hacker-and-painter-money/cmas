@@ -28,7 +28,7 @@ public class ResourceController {
                                             @RequestParam(required = false, name = "owner_id")String ownerId,
                                             @RequestParam(name = "page", defaultValue = "1") int page,
                                             @RequestParam(name = "page_size", defaultValue = "10") int pageSize) {
-        List<Resource> resourceList = resourceService.list(title, tag, ownerId, page, pageSize);
+        List<Resource> resourceList = resourceService.list(title, tag, ownerId);
         return ResponseUtil.getSuccessResponse(resourceList);
     }
 

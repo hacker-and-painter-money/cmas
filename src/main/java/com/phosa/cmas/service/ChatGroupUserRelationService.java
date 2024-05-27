@@ -18,16 +18,17 @@ public class ChatGroupUserRelationService extends ServiceImpl<ChatGroupUserRelat
     public List<ChatGroupUserRelation> list(QueryWrapper<ChatGroupUserRelation> queryWrapper) {
         return super.list(queryWrapper.lambda().ne(ChatGroupUserRelation::getStatus, 1));
     }
-    public List<ChatGroupUserRelation> list(Long groupId, Long userId, int page, int pageSize) {
+    public List<ChatGroupUserRelation> list(Long groupId, Long userId) {
         LambdaQueryWrapper<ChatGroupUserRelation> wrapper = Wrappers.<ChatGroupUserRelation>lambdaQuery();
         if (groupId != null) {
             wrapper.like(ChatGroupUserRelation::getGroupId, groupId);
         }
         if (userId != null) {
-            wrapper.eq(ChatGroupUserRelation::getUserId, userId); 
+            wrapper.eq(ChatGroupUserRelation::getUserId, userId);
         }
-        return list(wrapper.last("limit " + pageSize * (page - 1) + ", " + pageSize));
+        return list(wrapper);
     }
+
 
     public boolean exist(Long userId, Long groupId) {
         return !list(

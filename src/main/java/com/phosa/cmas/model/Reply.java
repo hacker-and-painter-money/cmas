@@ -33,7 +33,11 @@ public class Reply {
     private Long status;
     @TableField(fill = FieldFill.INSERT)
     private Date createdAt;
+    @TableField(exist = false)
+    private String createAtFormated;
     @TableField(fill = FieldFill.UPDATE)
     private Date updatedAt;
+    @TableField(exist = false)
+    private String updateAtFormated;
 
 }

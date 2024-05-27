@@ -33,16 +33,17 @@ public class ChatGroupController {
                                             @RequestParam(required = false) Long type,
                                             @RequestParam(name = "page", defaultValue = "1") int page,
                                             @RequestParam(name = "page_size", defaultValue = "10") int pageSize) {
-        List<ChatGroup> chatGroupList = chatGroupService.list(name, type, page, pageSize);
+        List<ChatGroup> chatGroupList = chatGroupService.list(name, type);
         return ResponseUtil.getSuccessResponse(chatGroupList);
     }
 
     @GetMapping("/user/{user_id}")
     public ResponseEntity<?> getChatGroupsByUser(@PathVariable(name = "user_id") Long userId,
+                                           @RequestParam(name = "except", defaultValue = "false") boolean except,
                                            @RequestParam(name = "page", defaultValue = "1") int page,
                                            @RequestParam(name = "page_size", defaultValue = "10") int pageSize) {
 
-        List<ChatGroup> chatGroupList = chatGroupService.listByUserId(userId, page, pageSize);
+        List<ChatGroup> chatGroupList = chatGroupService.listByUserId(userId, except);
         return ResponseUtil.getSuccessResponse(chatGroupList);
     }
 

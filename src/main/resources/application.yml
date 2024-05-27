@@ -8,6 +8,9 @@ spring:
 #    url: jdbc:mysql://localhost:3306/cmas
   main:
     allow-circular-references: true
+  redis:
+    password: 123456
+    host: server.aigc.sx.cn
 server:
   servlet:
     context-path: "/api"
@@ -16,3 +19,17 @@ mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   type-aliases-package: com.phosa.cmas.model
+
+mail:
+  qq:
+    username: 2424518904@qq.com
+    password: kgwhszwrqdahdiag
+    mail:
+      smtp:
+        auth: true
+        ssl:
+          enable: true
+        starttls:
+          enable: true
+        host: smtp.qq.com
+        port: 465

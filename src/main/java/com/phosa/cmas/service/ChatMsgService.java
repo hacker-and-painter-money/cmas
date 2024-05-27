@@ -29,7 +29,7 @@ public class ChatMsgService extends ServiceImpl<ChatMsgMapper, ChatMsg> {
     public List<ChatMsg> list() {
         return list(Wrappers.lambdaQuery());
     }
-    public List<ChatMsg> list(Long groupId, Long senderId, String content, Long parentMsgId, int page, int pageSize) {
+    public List<ChatMsg> list(Long groupId, Long senderId, String content, Long parentMsgId) {
         LambdaQueryWrapper<ChatMsg> wrapper = Wrappers.lambdaQuery();
         if (groupId != null) {
             wrapper.eq(ChatMsg::getGroupId, groupId);
@@ -43,7 +43,7 @@ public class ChatMsgService extends ServiceImpl<ChatMsgMapper, ChatMsg> {
         if (parentMsgId != null) {
             wrapper.eq(ChatMsg::getParentMsgId, parentMsgId);
         }
-        return list(wrapper.last("limit " + pageSize * (page - 1) + ", " + pageSize));
+        return list(wrapper);
     }
     public List<ChatMsg> list(LambdaQueryWrapper<ChatMsg> queryWrapper) {
         List<ChatMsg> chatMsgList = super.list(queryWrapper.eq(false, ChatMsg::getStatus, 1));

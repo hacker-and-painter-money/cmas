@@ -9,6 +9,7 @@ import com.phosa.cmas.mapper.QuestionMapper;
 import com.phosa.cmas.model.Question;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 @Service
@@ -24,12 +25,17 @@ public class QuestionService extends ServiceImpl<QuestionMapper, Question> {
     }
     public List<Question> list(LambdaQueryWrapper<Question> queryWrapper) {
         List<Question> questionList = super.list(queryWrapper.ne(Question::getStatus, 1));
+        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd");
         questionList.forEach(question -> {
             question.setSenderName(userService.getById(question.getSenderId()).getUsername());
+            question.setCreateAtFormated(sdf.format(question.getCreatedAt()));
+            if (question.getUpdatedAt() != null) {
+                question.setUpdateAtFormated(sdf.format(question.getUpdatedAt()));
+            }
         });
         return questionList;
     }
-    public List<Question> list(String title, String content, Long senderId, int page, int pageSize) {
+    public List<Question> list(String title, String content, Long senderId) {
         LambdaQueryWrapper<Question> wrapper = Wrappers.lambdaQuery();
         if (senderId != null) {
             wrapper.eq(Question::getSenderId, senderId);
@@ -40,6 +46,6 @@ public class QuestionService extends ServiceImpl<QuestionMapper, Question> {
         if (content != null) {
             wrapper.like(Question::getContent, content);
         }
-        return list(wrapper.last("limit " + pageSize * (page - 1) + ", " + pageSize));
+        return list(wrapper);
     }
 }

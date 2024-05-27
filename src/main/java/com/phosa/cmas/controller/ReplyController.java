@@ -3,6 +3,7 @@ package com.phosa.cmas.controller;
 import com.phosa.cmas.constant.ErrorResponse;
 import com.phosa.cmas.model.PointHistory;
 import com.phosa.cmas.model.Reply;
+import com.phosa.cmas.service.ContentApprovalService;
 import com.phosa.cmas.service.PointHistoryService;
 import com.phosa.cmas.service.ReplyService;
 import com.phosa.cmas.util.ResponseUtil;
@@ -21,6 +22,8 @@ public class ReplyController {
 
     @Autowired
     PointHistoryService pointHistoryService;
+    @Autowired
+    private ContentApprovalService contentApprovalService;
 
     @GetMapping("")
     public ResponseEntity<?> getReplyList(@RequestParam(required = false, name = "question_id") Long questionId,
@@ -28,7 +31,7 @@ public class ReplyController {
                                           @RequestParam(required = false, name = "sender_id") Long senderId,
                                           @RequestParam(name = "page", defaultValue = "1") int page,
                                           @RequestParam(name = "page_size", defaultValue = "10") int pageSize) {
-        List<Reply> replies = replyService.list(questionId, replyId, senderId, page, pageSize);
+        List<Reply> replies = replyService.list(questionId, replyId, senderId);
         return ResponseUtil.getSuccessResponse(replies);
     }
 
@@ -52,9 +55,12 @@ public class ReplyController {
     }
     @PostMapping("")
     public ResponseEntity<?> addReply(@RequestBody Reply reply) {
+        if (contentApprovalService.isContentViolated(reply.getContent())) {
+            return ResponseUtil.getFailResponse(ErrorResponse.CONTENT_VIOLATION);
+        }
         boolean res = replyService.save(reply);
         if (res) {
-            
+
             PointHistory pointHistory = new PointHistory();
             pointHistory.setChangeAmount(1L);
             pointHistory.setUserId(reply.getSenderId());

@@ -26,7 +26,7 @@ public class ChatMsgController {
                                                    @RequestParam(required = false, name = "parent_msg_id") Long parentMsgId,
                                                    @RequestParam(name = "page", defaultValue = "1") int page,
                                                    @RequestParam(name = "page_size", defaultValue = "10") int pageSize) {
-        List<ChatMsg> replies = chatMsgService.list(groupId, senderId, content, parentMsgId, page, pageSize);
+        List<ChatMsg> replies = chatMsgService.list(groupId, senderId, content, parentMsgId);
         return ResponseUtil.getSuccessResponse(replies);
     }
 

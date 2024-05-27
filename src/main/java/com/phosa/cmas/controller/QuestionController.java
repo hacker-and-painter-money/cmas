@@ -3,18 +3,15 @@ package com.phosa.cmas.controller;
 import com.phosa.cmas.constant.ErrorResponse;
 import com.phosa.cmas.model.PointHistory;
 import com.phosa.cmas.model.Question;
-import com.phosa.cmas.model.Question;
+import com.phosa.cmas.service.ContentApprovalService;
 import com.phosa.cmas.service.PointHistoryService;
 import com.phosa.cmas.service.QuestionService;
-import com.phosa.cmas.util.JsonUtil;
 import com.phosa.cmas.util.ResponseUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @RestController
 @RequestMapping("/question")
@@ -25,6 +22,8 @@ public class QuestionController {
 
     @Autowired
     PointHistoryService pointHistoryService;
+    @Autowired
+    private ContentApprovalService contentApprovalService;
 
     @GetMapping("")
     public ResponseEntity<?> getQuestionList(@RequestParam(required = false) String title,
@@ -32,7 +31,7 @@ public class QuestionController {
                                             @RequestParam(required = false, name = "sender_id") Long senderId,
                                             @RequestParam(name = "page", defaultValue = "1") int page,
                                             @RequestParam(name = "page_size", defaultValue = "10") int pageSize) {
-        List<Question> questionList = questionService.list(title, content, senderId, page, pageSize);
+        List<Question> questionList = questionService.list(title, content, senderId);
         return ResponseUtil.getSuccessResponse(questionList);
     }
 
@@ -56,6 +55,9 @@ public class QuestionController {
     }
     @PostMapping("")
     public ResponseEntity<?> addQuestion(@RequestBody Question question) {
+        if (contentApprovalService.isContentViolated(question.getContent(), question.getTitle())) {
+            return ResponseUtil.getFailResponse(ErrorResponse.CONTENT_VIOLATION);
+        }
         boolean res = questionService.save(question);
         if (res) {
             PointHistory pointHistory = new PointHistory();

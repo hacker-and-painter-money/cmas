@@ -25,7 +25,7 @@ public class ResourceService extends ServiceImpl<ResourceMapper, Resource> {
     public List<Resource> list(LambdaQueryWrapper<Resource> queryWrapper) {
         return super.list(queryWrapper.ne(Resource::getStatus, 1));
     }
-    public List<Resource> list(String title, String tag, String ownerId, int page, int pageSize) {
+    public List<Resource> list(String title, String tag, String ownerId) {
         LambdaQueryWrapper<Resource> wrapper = Wrappers.<Resource>lambdaQuery();
         if (title != null) {
             wrapper.like(Resource::getTitle, title);
@@ -36,7 +36,7 @@ public class ResourceService extends ServiceImpl<ResourceMapper, Resource> {
         if (ownerId != null) {
             wrapper.eq(Resource::getOwnerId, ownerId);
         }
-        return list(wrapper.last("limit " + pageSize * (page - 1) + ", " + pageSize));
+        return list(wrapper);
 
     }
 }

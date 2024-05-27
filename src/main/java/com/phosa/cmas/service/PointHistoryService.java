@@ -15,22 +15,22 @@ import java.util.List;
 
 @Service
 public class PointHistoryService extends ServiceImpl<PointHistoryMapper, PointHistory> {
-    
+
     @Autowired
     PointService pointService;
-    
+
     public List<PointHistory> list() {
         return list(Wrappers.lambdaQuery());
     }
     public List<PointHistory> list(LambdaQueryWrapper<PointHistory> queryWrapper) {
         return super.list(queryWrapper.ne(PointHistory::getStatus, 1));
     }
-    public List<PointHistory> list(Long userId, int page, int pageSize) {
+    public List<PointHistory> list(Long userId) {
         LambdaQueryWrapper<PointHistory> wrapper = Wrappers.<PointHistory>lambdaQuery();
         if (userId != null) {
             wrapper.eq(PointHistory::getUserId, userId);
         }
-        return list(wrapper.last("limit " + pageSize * (page - 1) + ", " + pageSize));
+        return list(wrapper);
     }
     public boolean changePoint(PointHistory pointHistory){
         if (save(pointHistory)) {

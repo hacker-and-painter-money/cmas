@@ -21,6 +21,9 @@ public class User {
     private Long id;
     private String username;
     private String password;
+    private String nickname;
+    private String signature;
+    private String email;
     private Long identity;
     @TableField(fill = FieldFill.INSERT)
     private Long status;
@@ -28,5 +31,8 @@ public class User {
     private Date createdAt;
     @TableField(fill = FieldFill.UPDATE)
     private Date updatedAt;
+    @TableField(exist = false)
+    @JsonProperty("verification_code")
+    private String verificationCode;
 
 }

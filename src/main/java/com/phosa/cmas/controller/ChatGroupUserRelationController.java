@@ -30,7 +30,7 @@ public class ChatGroupUserRelationController {
                                                         @RequestParam(name = "user_id", required = false) Long userId,
                                                         @RequestParam(name = "page", defaultValue = "1") int page,
                                                         @RequestParam(name = "page_size", defaultValue = "10") int pageSize) {
-        List<ChatGroupUserRelation> chatGroupUserRelationList = chatGroupUserRelationService.list(groupId, userId, page, pageSize);
+        List<ChatGroupUserRelation> chatGroupUserRelationList = chatGroupUserRelationService.list(groupId, userId);
         return ResponseUtil.getSuccessResponse(chatGroupUserRelationList);
     }
 

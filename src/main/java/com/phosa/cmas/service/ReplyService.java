@@ -9,6 +9,7 @@ import com.phosa.cmas.model.Reply;
 import com.phosa.cmas.model.User;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 @Service
@@ -24,16 +25,21 @@ public class ReplyService extends ServiceImpl<ReplyMapper, Reply> {
     }
     public List<Reply> list(LambdaQueryWrapper<Reply> queryWrapper) {
         List<Reply> replyList = super.list(queryWrapper.ne(Reply::getStatus, 1));
+        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd");
         replyList.forEach(reply -> {
             User user = userService.getById(reply.getSenderId());
             reply.setSenderName(user.getUsername());
             if (reply.getParentReplyId() != null) {
                 reply.setParentReplyContent(getById(reply.getParentReplyId()).getContent());
             }
+            reply.setCreateAtFormated(sdf.format(reply.getCreatedAt()));
+            if (reply.getUpdatedAt() != null) {
+                reply.setUpdateAtFormated(sdf.format(reply.getUpdatedAt()));
+            }
         });
         return replyList;
     }
-    public List<Reply> list(Long questionId, Long replyId, Long senderId, int page, int pageSize) {
+    public List<Reply> list(Long questionId, Long replyId, Long senderId) {
         LambdaQueryWrapper<Reply> wrapper = Wrappers.<Reply>lambdaQuery();
         if (questionId != null) {
             wrapper.eq(Reply::getQuestionId, questionId);
@@ -44,6 +50,6 @@ public class ReplyService extends ServiceImpl<ReplyMapper, Reply> {
         if (senderId != null) {
             wrapper.eq(Reply::getSenderId, senderId);
         }
-        return list(wrapper.last("limit " + pageSize * (page - 1) + ", " + pageSize));
+        return list(wrapper);
     }
 }
